@@ -4,3 +4,4 @@ from django.db import models
 
 class PurchasingItem(models.Model):
     name = models.CharField(max_length=70)
+    is_active = models.BooleanField(default=True)

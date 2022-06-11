@@ -1,0 +1,45 @@
+{
+  "node_modules/nuxt/dist/app/entry.mjs": {
+    "file": "entry-06409b82.mjs",
+    "src": "node_modules/nuxt/dist/app/entry.mjs",
+    "isEntry": true,
+    "dynamicImports": [
+      "pages/einkaufsliste.vue",
+      "pages/index.vue"
+    ],
+    "css": [
+      "entry.f0ddd248.css"
+    ],
+    "assets": [
+      "materialdesignicons-webfont.887a46a0.eot",
+      "materialdesignicons-webfont.e9522727.woff2",
+      "materialdesignicons-webfont.acbe194b.woff",
+      "materialdesignicons-webfont.86fcc8e4.ttf",
+      "materialdesignicons-webfont.87f88639.svg"
+    ]
+  },
+  "pages/einkaufsliste.vue": {
+    "file": "einkaufsliste-2e6ce131.mjs",
+    "src": "pages/einkaufsliste.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_appBar-cf9058b6.mjs",
+      "node_modules/nuxt/dist/app/entry.mjs"
+    ]
+  },
+  "_appBar-cf9058b6.mjs": {
+    "file": "appBar-cf9058b6.mjs",
+    "imports": [
+      "node_modules/nuxt/dist/app/entry.mjs"
+    ]
+  },
+  "pages/index.vue": {
+    "file": "index-f0759f05.mjs",
+    "src": "pages/index.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_appBar-cf9058b6.mjs",
+      "node_modules/nuxt/dist/app/entry.mjs"
+    ]
+  }
+}
