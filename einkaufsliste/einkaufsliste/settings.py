@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n3vz1d0w&we9t+1t)#l7#pn)xxq0luzx+3!umjcoha)c%*h=y1'
+# SECRET_KEY = 'django-insecure-n3vz1d0w&we9t+1t)#l7#pn)xxq0luzx+3!umjcoha)c%*h=y1'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'loggik.pythonanywhere.com']
 
 
 # Application definition
@@ -139,3 +141,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+STATIC_ROOT = '/home/loggik/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'
