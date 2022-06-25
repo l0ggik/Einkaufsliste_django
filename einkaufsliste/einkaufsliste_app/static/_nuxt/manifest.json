@@ -1,14 +1,16 @@
 {
   "node_modules/nuxt/dist/app/entry.mjs": {
-    "file": "entry-135e323c.mjs",
+    "file": "entry-2d8a9b3d.mjs",
     "src": "node_modules/nuxt/dist/app/entry.mjs",
     "isEntry": true,
     "dynamicImports": [
       "pages/einkaufsliste.vue",
-      "pages/index.vue"
+      "pages/index.vue",
+      "pages/rezepte.vue",
+      "layouts/default.vue"
     ],
     "css": [
-      "entry.f0ddd248.css"
+      "entry.2af00881.css"
     ],
     "assets": [
       "materialdesignicons-webfont.887a46a0.eot",
@@ -19,26 +21,34 @@
     ]
   },
   "pages/einkaufsliste.vue": {
-    "file": "einkaufsliste-3b7b079e.mjs",
+    "file": "einkaufsliste-75570d7f.mjs",
     "src": "pages/einkaufsliste.vue",
     "isDynamicEntry": true,
-    "imports": [
-      "_appBar-c4744f88.mjs",
-      "node_modules/nuxt/dist/app/entry.mjs"
-    ]
-  },
-  "_appBar-c4744f88.mjs": {
-    "file": "appBar-c4744f88.mjs",
     "imports": [
       "node_modules/nuxt/dist/app/entry.mjs"
     ]
   },
   "pages/index.vue": {
-    "file": "index-aa29b106.mjs",
+    "file": "index-e2498e16.mjs",
     "src": "pages/index.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_appBar-c4744f88.mjs",
+      "node_modules/nuxt/dist/app/entry.mjs"
+    ]
+  },
+  "pages/rezepte.vue": {
+    "file": "rezepte-4f0cd985.mjs",
+    "src": "pages/rezepte.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "node_modules/nuxt/dist/app/entry.mjs"
+    ]
+  },
+  "layouts/default.vue": {
+    "file": "default-762aee7f.mjs",
+    "src": "layouts/default.vue",
+    "isDynamicEntry": true,
+    "imports": [
       "node_modules/nuxt/dist/app/entry.mjs"
     ]
   }
