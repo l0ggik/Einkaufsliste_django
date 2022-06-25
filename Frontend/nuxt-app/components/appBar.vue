@@ -1,10 +1,12 @@
 <template>
-    <v-app-bar color="green-lighten-5" elevation="0">
-        <v-breadcrumbs :items="items"></v-breadcrumbs>
-        <!-- <NuxtLink to="/">Start</NuxtLink>
-        <NuxtLink to="/einkaufsliste">Einkaufsliste</NuxtLink>
-        <NuxtLink to="/test">Test</NuxtLink> -->
-    </v-app-bar>
+    <div>
+        <v-app-bar color="green-lighten-5" elevation="0">
+            <v-breadcrumbs :items="items"></v-breadcrumbs>
+            <!-- <NuxtLink to="/">Start</NuxtLink>
+            <NuxtLink to="/einkaufsliste">Einkaufsliste</NuxtLink>
+            <NuxtLink to="/test">Test</NuxtLink> -->
+        </v-app-bar>
+    </div>
 </template>
 <script setup>
 const items = [

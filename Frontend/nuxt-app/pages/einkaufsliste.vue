@@ -1,10 +1,9 @@
 <template>
-  <v-app>
-    <AppBar />
-    <v-main>
+  <!-- <v-app>
+    <v-main> -->
       <v-container>
         <v-row justify="center">
-          <v-card max-width="250px">
+          <v-card min-width="150px" class="cardtest">
             <v-toolbar class="bg-green-lighten-2" max-height="10px" height="10px">
               <v-toolbar-title max-height="10px" height="10px"> </v-toolbar-title>
             </v-toolbar>
@@ -31,16 +30,23 @@
             </v-card-text>
             <v-card-actions>
               <div>
+                <v-divider></v-divider>
                 <v-btn :disabled="loading" @click="removeAll" class="bg-green-lighten-5">alles entfernen</v-btn>
+                <v-divider></v-divider>
               </div>
             </v-card-actions>
           </v-card>
         </v-row>
       </v-container>
-    </v-main>
-  </v-app>
+    <!-- </v-main>
+  </v-app> -->
 </template>
 <script setup>
+
+definePageMeta({
+  layout: "custom",
+});
+
 // const baseUrl = 'https://jft1337.pythonanywhere.com/api/'
 const baseUrl = 'https://loggik.pythonanywhere.com/api/'
 // const baseUrl = "http://127.0.0.1:8000/api/";
@@ -85,7 +91,8 @@ onUnmounted(() => {
 });
 </script>
 <style lang="scss">
+
   .sbutton {
-    $text-transform: none;
+    text-transform: none !important;
   }
 </style>

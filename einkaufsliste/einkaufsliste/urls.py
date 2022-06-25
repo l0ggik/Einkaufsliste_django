@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from einkaufsliste_app.views import PurchasingItemViewSet, einkaufsliste, index
+from einkaufsliste_app.views import CustomListViewSet, ListItemViewSet, PurchasingItemViewSet, einkaufsliste, index
 
 router = routers.DefaultRouter()
 router.register(r'einkauf', PurchasingItemViewSet)
+router.register(r'lists', CustomListViewSet)
+router.register(r'list_items', ListItemViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),

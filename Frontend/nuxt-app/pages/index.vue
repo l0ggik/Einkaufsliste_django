@@ -1,7 +1,7 @@
 <template>
-    <v-app>
+    <!-- <v-app>
         <AppBar/>
-        <v-main>
+        <v-main> -->
             <v-card>
                 <v-card-title>
                     Startseite
@@ -11,10 +11,13 @@
                     Hier ist bisher noch nichts aber wenn du dem Menü zur Einkaufsliste folgst kannst du dort meine selbst gebaute Einkaufsliste finden.
                 </v-card-text>
             </v-card>
-        </v-main>
-    </v-app>
+        <!-- </v-main>
+    </v-app> -->
 </template>
 <script setup>
+    definePageMeta({
+        layout: "custom",
+    });
 </script>
 <style lang="">
     

@@ -4,8 +4,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from einkaufsliste_app.models import PurchasingItem
-from einkaufsliste_app.serializers import PurchasingItemSerializer
+from einkaufsliste_app.models import CustomList, ListItem, PurchasingItem
+from einkaufsliste_app.serializers import CustomListSerializer, ListItemSerializer, PurchasingItemSerializer
 
 class PurchasingItemViewSet(viewsets.ModelViewSet):
     queryset = PurchasingItem.objects.filter(is_active=True)
@@ -31,6 +31,14 @@ class PurchasingItemViewSet(viewsets.ModelViewSet):
         queryset = PurchasingItem.objects.filter(is_active=True)
         updated_rows = queryset.update(is_active=False)
         return Response(updated_rows)
+
+class CustomListViewSet(viewsets.ModelViewSet):
+    queryset = CustomList.objects.all()
+    serializer_class = CustomListSerializer
+
+class ListItemViewSet(viewsets.ModelViewSet):
+    queryset = ListItem.objects.all()
+    serializer_class = ListItemSerializer    
 
 def index(request):
     return render(request, 'index.html')

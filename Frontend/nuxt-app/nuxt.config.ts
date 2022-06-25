@@ -8,8 +8,12 @@ export default defineNuxtConfig({
   },
   vite: {
     define: {
-      'process.env.DEBUG': false,
+      'process.env.DEBUG': true,
     },
   },
   target: 'static',
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    treeShake: true
+  },
 })
