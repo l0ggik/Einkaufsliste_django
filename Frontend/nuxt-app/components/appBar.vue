@@ -20,6 +20,11 @@ const items = [
         disabled: false,
         href: '/einkaufsliste',
     },
+    {
+        text: 'Rezepte',
+        disabled: false,
+        href: '/rezepte',
+    },
 ]
 </script>
 <style>

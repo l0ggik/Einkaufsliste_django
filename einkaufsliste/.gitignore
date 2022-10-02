@@ -8,6 +8,7 @@
 *.pyc
 __pycache__/
 */__pycache__/
+einkaufsliste/__pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -166,6 +167,12 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+#Calendar
+Abfuhrtermine.ics
+
+#Test Jupyter Notebook
+tests.ipynb
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

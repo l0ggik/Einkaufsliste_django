@@ -1,6 +1,7 @@
 <template>
   <!-- <v-app>
     <v-main> -->
+      <div>
       <v-container>
         <v-row justify="center">
           <v-card min-width="150px" class="cardtest">
@@ -12,8 +13,8 @@
             </v-card-title>
             <v-card-text>
               <div v-if="items && !loading">
-                <v-row justify="center" v-for="item in items" :key="item.id">
-                  <v-btn class="my-2 bg-green-lighten-4 sbutton" @click="deleteEntry(item.id)">{{ item.name }}
+                <v-row justify="center" v-for="item in items" :key="item.id" class="mt-4">
+                  <v-btn class="bg-green-lighten-4 sbutton" @click="deleteEntry(item.id)">{{ item.name }}
                   </v-btn>
                 </v-row>
               </div>
@@ -26,18 +27,22 @@
                   <div>
                     <v-btn :disabled="loading" class="bg-green-lighten-5" @click="createEntry">abschicken</v-btn>
                   </div>
+                  <v-divider class="my-3"></v-divider>
+                  <v-btn :disabled="loading" @click="removeAll" class="bg-green-lighten-5 mb-3">alles entfernen</v-btn>
                 </v-row>
             </v-card-text>
-            <v-card-actions>
+            <!-- <v-card-actions>
               <div>
                 <v-divider></v-divider>
+                <v-spacer></v-spacer>
                 <v-btn :disabled="loading" @click="removeAll" class="bg-green-lighten-5">alles entfernen</v-btn>
                 <v-divider></v-divider>
               </div>
-            </v-card-actions>
+            </v-card-actions> -->
           </v-card>
         </v-row>
       </v-container>
+    </div>
     <!-- </v-main>
   </v-app> -->
 </template>
@@ -48,8 +53,8 @@ definePageMeta({
 });
 
 // const baseUrl = 'https://jft1337.pythonanywhere.com/api/'
-const baseUrl = 'https://loggik.pythonanywhere.com/api/'
-// const baseUrl = "http://127.0.0.1:8000/api/";
+// const baseUrl = 'https://loggik.pythonanywhere.com/api/'
+const baseUrl = "http://127.0.0.1:8000/api/";
 let items = useState("items", () => []);
 let input = useState("input", () => "");
 let loading = useState("loading", () => true);

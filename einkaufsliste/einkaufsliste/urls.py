@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from einkaufsliste_app.views import CustomListViewSet, ListItemViewSet, PurchasingItemViewSet, einkaufsliste, index
+from einkaufsliste_app.views import CustomListViewSet, ListItemViewSet, PurchasingItemViewSet, WeatherDataViewSet,waste_events, einkaufsliste, index, rezepte
 
 router = routers.DefaultRouter()
 router.register(r'einkauf', PurchasingItemViewSet)
+router.register(r'wetter', WeatherDataViewSet)
 router.register(r'lists', CustomListViewSet)
 router.register(r'list_items', ListItemViewSet)
 
@@ -30,4 +31,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', index, name='index'),
     path('einkaufsliste/', einkaufsliste, name='einkaufsliste'),
+    path('rezepte/', rezepte, name='rezepte'),
+    path('api/muell/', waste_events, name='waste_events')
 ]

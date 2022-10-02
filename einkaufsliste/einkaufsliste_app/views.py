@@ -1,11 +1,17 @@
-from crypt import methods
 from http.client import HTTPResponse
+import re
 from django.shortcuts import render
-from rest_framework import viewsets
+from django.utils import timezone
+from django.conf import settings
+from rest_framework import viewsets, mixins
 from rest_framework.response import Response
-from rest_framework.decorators import action
-from einkaufsliste_app.models import CustomList, ListItem, PurchasingItem
-from einkaufsliste_app.serializers import CustomListSerializer, ListItemSerializer, PurchasingItemSerializer
+from rest_framework.decorators import action, api_view
+from einkaufsliste_app.models import CustomList, ListItem, PurchasingItem, WasteEvent, WeatherData
+from einkaufsliste_app.serializers import CustomListSerializer, ListItemSerializer, PurchasingItemSerializer, WasteEventSerializer, WeatherDataSerializer
+from decouple import config
+import requests
+import os
+import datetime
 
 class PurchasingItemViewSet(viewsets.ModelViewSet):
     queryset = PurchasingItem.objects.filter(is_active=True)
@@ -38,10 +44,151 @@ class CustomListViewSet(viewsets.ModelViewSet):
 
 class ListItemViewSet(viewsets.ModelViewSet):
     queryset = ListItem.objects.all()
-    serializer_class = ListItemSerializer    
+    serializer_class = ListItemSerializer
+
+class WeatherDataViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = WeatherData.objects.all()
+    serializer_class = WeatherDataSerializer
+    
+    def list(self, request):
+        latest_data = WeatherData.objects.filter(data_type=1).latest('weather_date')
+        if (timezone.now() - latest_data.data_received_date) > datetime.timedelta(hours=1):
+            if settings.DEBUG:
+                parameter = {
+                    'lat': config('lat'),
+                    'lon': config('lon'),
+                    'appid': config('API_KEY'),
+                    'lang': config('lang'),
+                }
+            else:
+                parameter = {
+                    'lat': os.getenv('lat'),
+                    'lon': os.getenv('lon'),
+                    'appid': os.getenv("API_KEY"),
+                    'lang': os.getenv('lang'),
+                }
+            response = requests.get('https://api.openweathermap.org/data/2.5/weather', params=parameter)
+            if response.status_code == 200:
+                json_response = response.json()
+                data = {
+                    'data_type': 1,
+                    'weather_id': json_response['weather'][0]['id'],
+                    'description': json_response['weather'][0]['description'],
+                    'temperature': json_response['main']['temp'],
+                    'temperature_min': json_response['main']['temp_min'],
+                    'temperature_max': json_response['main']['temp_max'],
+                    'clouds': json_response['clouds']['all'],
+                    'weather_date': datetime.datetime.fromtimestamp(json_response['dt'], timezone.utc),
+                    'data_received_date': timezone.now()
+                }
+                serializer = WeatherDataSerializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(response.json())
+        else:
+            serializer = WeatherDataSerializer(latest_data)
+            return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def wetter_morgen(self, request):
+        weather_data = get_weather_forecast_data(1)
+        return Response(weather_data)
+
+    
+    @action(detail=False, methods=['get'])
+    def wetter_uebermorgen(self, request):
+        weather_data = get_weather_forecast_data(2)
+        return Response(weather_data)
+
+def get_weather_forecast_data(days_ahead):
+    now = timezone.now()
+    try:
+        latest_data = WeatherData.objects.filter(data_type=2).latest('weather_date')
+    except WeatherData.DoesNotExist:
+        weatherdatas = get_wether_forecast_data_from_api()
+        if weatherdatas:
+            weatherdatas = WeatherData.objects.bulk_create(weatherdatas)
+            latest_data = WeatherData.objects.filter(data_type=2).latest('weather_date')
+    forecast_timedelta = datetime.timedelta(days=days_ahead)
+    if (timezone.now() - latest_data.data_received_date) > datetime.timedelta(hours=1):
+        WeatherData.objects.filter(data_type=2).delete()
+        weatherdatas = get_wether_forecast_data_from_api()
+        # print("Weatherdatas from API", weatherdatas)
+        if weatherdatas: 
+            weatherdatas = WeatherData.objects.bulk_create(weatherdatas)
+            # print("Weatherdata queryset", weatherdatas)
+            weatherdatas = [weatherdata for weatherdata in weatherdatas if weatherdata.weather_date.date() == now.date() + forecast_timedelta]
+            # print("Weatherdatas: ", weatherdatas)
+            serializer = WeatherDataSerializer(weatherdatas, many=True)
+            return serializer.data
+    else:
+        queryset = WeatherData.objects.filter(data_type=2, weather_date__date=now.date() + forecast_timedelta)
+        serializer = WeatherDataSerializer(queryset, many=True)
+        return serializer.data
+
+def get_wether_forecast_data_from_api():
+    if settings.DEBUG:
+        parameter = {
+            'lat': config('lat'),
+            'lon': config('lon'),
+            'appid': config('API_KEY'),
+            'lang': config('lang'),
+        }
+    else:
+        parameter = {
+            'lat': os.getenv('lat'),
+            'lon': os.getenv('lon'),
+            'appid': os.getenv("API_KEY"),
+            'lang': os.getenv('lang'),
+        }
+    response = requests.get('https://api.openweathermap.org/data/2.5/forecast', params=parameter)
+    if response.status_code == 200:
+        json_response = response.json()
+        weather_data_list = json_response['list']
+        now = timezone.now()
+        weatherdatas = []
+        for weather_data in weather_data_list:
+            weather_date = datetime.datetime.fromtimestamp(weather_data['dt'], timezone.utc)
+            if weather_date.date() - now.date() > datetime.timedelta(days=2):
+                break
+            else:
+                weatherdata_object = WeatherData(
+                    data_type = 2,
+                    weather_id = weather_data['weather'][0]['id'],
+                    description = weather_data['weather'][0]['description'],
+                    temperature = weather_data['main']['temp'],
+                    temperature_min = weather_data['main']['temp_min'],
+                    temperature_max = weather_data['main']['temp_max'],
+                    clouds = weather_data['clouds']['all'],
+                    weather_date = weather_date,
+                    data_received_date = now,
+                    probability_of_rain = weather_data['pop']
+                )
+                weatherdatas.append(weatherdata_object)
+        return weatherdatas
+    else:
+        return response.json()
+
+@api_view()
+def waste_events(request):
+    queryset = WasteEvent.objects.filter(event_date__gte=timezone.now().date())[:5]
+    serializer_class = WasteEventSerializer
+    serializer = WasteEventSerializer(queryset, many=True)
+
+    return Response(serializer.data)
+
+@action(detail=False, methods=['get'])
+def test(self, request):
+    testvar += 1
+    return Response(testvar)
 
 def index(request):
     return render(request, 'index.html')
 
 def einkaufsliste(request):
-    return render(request, 'einkaufsliste.html')
+    return render(request, 'einkaufsliste/index.html')
+
+def rezepte(request):
+    return render(request, 'rezepte/index.html')

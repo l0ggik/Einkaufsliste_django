@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'loggik.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'loggik.pythonanywhere.com', 'jft1337.pythonanywhere.com']
 
 
 # Application definition
@@ -144,4 +144,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-STATIC_ROOT = '/home/loggik/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'
+# STATIC_ROOT = '/home/loggik/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'
+STATIC_ROOT = '/home/jft1337/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'

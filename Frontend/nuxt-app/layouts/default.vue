@@ -1,12 +1,9 @@
 <template>
     <v-app>
-    <v-app-bar color="green-lighten-5" elevation="0">
+    <v-app-bar color="green-lighten-2" elevation="0">
         <v-breadcrumbs :items="items">
         </v-breadcrumbs>
         <v-divider vertical></v-divider>
-        <!-- <NuxtLink to="/">Start</NuxtLink>
-        <NuxtLink to="/einkaufsliste">Einkaufsliste</NuxtLink>
-        <NuxtLink to="/test">Test</NuxtLink> -->
         <v-breadcrumbs>
             <v-menu>
                 <template v-slot:activator="{ props }">
@@ -24,7 +21,7 @@
             </v-menu>
         </v-breadcrumbs>
     </v-app-bar>
-    <v-main>
+    <v-main class="bg-grey-lighten-3">
         <slot />
     </v-main>
     </v-app>
@@ -32,21 +29,40 @@
 <script setup>
 const items = [
     {
-        text: 'Start',
+        title: 'Start',
         disabled: false,
         href: '/',
     },
     {
-        text: 'Einkaufsliste',
+        title: 'Einkaufsliste',
         disabled: false,
         href: '/einkaufsliste',
     },
     {
-        text: 'Rezepte',
+        title: 'Rezepte',
         disabled: false,
         href: '/rezepte',
     },
 ]
+// const breadcrumbItems = useState("breadcrumbItems", () => 
+//  [
+//     {
+//         text: 'Start',
+//         disabled: false,
+//         href: '/',
+//     },
+//     {
+//         text: 'Einkaufsliste',
+//         disabled: false,
+//         href: '/einkaufsliste',
+//     },
+//     {
+//         text: 'Rezepte',
+//         disabled: false,
+//         href: '/rezepte',
+//     },
+// ]
+// )
 </script>
 <style>
 </style>
