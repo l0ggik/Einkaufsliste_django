@@ -13,8 +13,8 @@
   </div>
 </template>
 <script setup>
-  // const baseUrl = 'https://loggik.pythonanywhere.com/api/'
-  const baseUrl = 'https://jft1337.pythonanywhere.com/api/'
+  const baseUrl = 'https://loggik.pythonanywhere.com/api/'
+  // const baseUrl = 'https://jft1337.pythonanywhere.com/api/'
   // const baseUrl = "http://127.0.0.1:8000/api/";
   // const weatherData = useState('weatherData', () => {})
   const { data: weatherData, pending, refresh, error } = await useFetch(baseUrl + "wetter/")

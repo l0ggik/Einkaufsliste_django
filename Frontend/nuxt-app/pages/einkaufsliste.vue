@@ -53,8 +53,8 @@ definePageMeta({
 });
 
 // const baseUrl = 'https://jft1337.pythonanywhere.com/api/'
-// const baseUrl = 'https://loggik.pythonanywhere.com/api/'
-const baseUrl = "http://127.0.0.1:8000/api/";
+const baseUrl = 'https://loggik.pythonanywhere.com/api/'
+// const baseUrl = "http://127.0.0.1:8000/api/";
 let items = useState("items", () => []);
 let input = useState("input", () => "");
 let loading = useState("loading", () => true);
