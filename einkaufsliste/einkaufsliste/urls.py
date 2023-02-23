@@ -17,13 +17,24 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from einkaufsliste_app.views import CustomListViewSet, ListItemViewSet, PurchasingItemViewSet, WeatherDataViewSet,waste_events, einkaufsliste, index, rezepte
+from einkaufsliste_app.views import (
+    CustomListViewSet, 
+    ListItemViewSet, 
+    PurchasingItemViewSet, 
+    RecipeViewSet, 
+    WeatherDataViewSet,
+    waste_events, 
+    einkaufsliste, 
+    index, 
+    rezepte   
+)
 
 router = routers.DefaultRouter()
 router.register(r'einkauf', PurchasingItemViewSet)
 router.register(r'wetter', WeatherDataViewSet)
 router.register(r'lists', CustomListViewSet)
 router.register(r'list_items', ListItemViewSet)
+router.register(r'recipes', RecipeViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),

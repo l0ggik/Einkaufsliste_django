@@ -13,10 +13,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from decouple import config
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -29,7 +31,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'loggik.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'loggik.pythonanywhere.com', 'api.einkaufsliste.loggik.de']
 
 
 # Application definition
@@ -144,4 +146,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-STATIC_ROOT = '/home/loggik/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'
+# STATIC_ROOT = '/home/loggik/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'

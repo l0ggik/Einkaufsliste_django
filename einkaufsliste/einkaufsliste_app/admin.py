@@ -1,5 +1,5 @@
 from django.contrib import admin
-from einkaufsliste_app.models import CustomList, ListItem, PurchasingItem, WasteEvent, WeatherData
+from einkaufsliste_app.models import CustomList, ListItem, PurchasingItem, WasteEvent, WeatherData, Recipe, Ingredient, IngredientName, Category
 
 # Register your models here.
 class PurchasingItemAdmin(admin.ModelAdmin):
@@ -17,8 +17,25 @@ class WeatherDataAdmin(admin.ModelAdmin):
 class WasteEventAdmin(admin.ModelAdmin):
     pass
 
+class RecipeAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    search_fields = ['name', 'number']
+
+class IngredientAdmin(admin.ModelAdmin):
+    list_display = ['amount', 'unit']
+
+class IngredientNameAdmin(admin.ModelAdmin):
+    pass
+
+class CategoryAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(PurchasingItem, PurchasingItemAdmin)
 admin.site.register(CustomList, CustomListAdmin)
 admin.site.register(ListItem, ListItemAdmin)
 admin.site.register(WeatherData, WeatherDataAdmin)
 admin.site.register(WasteEvent, WasteEventAdmin)
+admin.site.register(Recipe, RecipeAdmin)
+admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(IngredientName, IngredientNameAdmin)
+admin.site.register(Category, CategoryAdmin)

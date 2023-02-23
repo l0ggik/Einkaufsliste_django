@@ -1,17 +1,34 @@
-from http.client import HTTPResponse
+import os
+import requests
+import datetime
 import re
+from decouple import config
+from http.client import HTTPResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.conf import settings
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view
-from einkaufsliste_app.models import CustomList, ListItem, PurchasingItem, WasteEvent, WeatherData
-from einkaufsliste_app.serializers import CustomListSerializer, ListItemSerializer, PurchasingItemSerializer, WasteEventSerializer, WeatherDataSerializer
-from decouple import config
-import requests
-import os
-import datetime
+from einkaufsliste_app.models import (
+    CustomList,
+    ListItem, 
+    PurchasingItem, 
+    WasteEvent, 
+    WeatherData,
+    Recipe,
+    Ingredient,
+    IngredientName
+)
+from einkaufsliste_app.serializers import (
+    CustomListSerializer, 
+    ListItemSerializer, 
+    PurchasingItemSerializer, 
+    WasteEventSerializer, 
+    WeatherDataSerializer,
+    RecipeSerializer,
+    IngredientSerializer
+)
 
 class PurchasingItemViewSet(viewsets.ModelViewSet):
     queryset = PurchasingItem.objects.filter(is_active=True)
@@ -101,6 +118,49 @@ class WeatherDataViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def wetter_uebermorgen(self, request):
         weather_data = get_weather_forecast_data(2)
         return Response(weather_data)
+
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+
+    def create(self, request, *args, **kwargs):
+        name = request.data['name']
+        preparation = request.data['preparation']
+        ingredients = request.data['ingredients']
+        recipe = Recipe.objects.create(
+            name = name,
+            preparation = preparation 
+        )
+        for ingredient in ingredients:
+            name, created = IngredientName.objects.get_or_create(name=ingredient['name'])
+            Ingredient.objects.create(
+                name = name,
+                amount = ingredient['amount'],
+                unit = ingredient['unit'],
+                recipe = recipe                                                                                   
+            )
+        serializer = self.get_serializer(recipe)
+        return Response(serializer.data)
+    
+    def list(self, request, *args, **kwargs):
+        queryset = Recipe.objects.all()
+        serializer = RecipeSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def random(self, request):
+        item = Recipe.objects.order_by('?').first()
+        serializer = RecipeSerializer(item)
+        return Response(serializer.data)
+
+class IngredientViewSet(viewsets.GenericViewSet):
+    queryset = Ingredient.objects.none()
+    serializer_class = IngredientSerializer
+
+    def create(self, request, *args, **kwargs):
+        name = request.data['name']
+        amount = request.data['amount']
+        unit = request.data.unit
 
 def get_weather_forecast_data(days_ahead):
     now = timezone.now()

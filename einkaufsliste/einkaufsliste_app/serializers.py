@@ -1,5 +1,13 @@
 from rest_framework import serializers
-from einkaufsliste_app.models import CustomList, ListItem, PurchasingItem, WasteEvent, WeatherData
+from einkaufsliste_app.models import (
+    CustomList, 
+    ListItem, 
+    PurchasingItem, 
+    WasteEvent, 
+    WeatherData,
+    Recipe,
+    Ingredient
+)
 
 class PurchasingItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +33,17 @@ class WasteEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = WasteEvent
         fields = '__all__'
+
+
+class IngredientSerializer(serializers.ModelSerializer):
+    name = serializers.StringRelatedField()
+    class Meta:
+        model = Ingredient
+        fields = ['name', 'amount', 'get_unit_display']
+
+class RecipeSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerializer(many=True, read_only=True)
+    class Meta:
+        model = Recipe
+        fields = ['name', 'preparation', 'ingredients']
+
