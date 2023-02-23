@@ -1,0 +1,22 @@
+services:
+  backend:
+    # container-name: einkaufsliste-backend
+    restart: unless-stopped
+    build:
+      context: ./einkaufsliste
+      dockerfile: ../docker/images/backend/Dockerfile
+    volumes:
+      - ./einkaufsliste:/django
+    environment:
+      DEBUG: "true"
+  web-static:
+    # container-name: einkaufsliste-web-static
+    restart: unless-stopped
+    build: ./docker/images/web-static
+    volumes:
+      - ./einkaufsliste/staticfiles:/usr/share/nginx/html/static
+      - ./einkaufsliste/project/media:/usr/share/nginx/html/media
+    ports:
+      - ${PORT_WEB_STATIC}:80
+    depends_on:
+      - backend
