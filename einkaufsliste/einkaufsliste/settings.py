@@ -14,6 +14,8 @@ from pathlib import Path
 from decouple import config
 import os
 from dotenv import load_dotenv
+from os.path import dirname
+from sys import path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +24,17 @@ load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+
+# Absolute filesystem path to the top-level project folder:
+SITE_ROOT = dirname(BASE_DIR)
+
+# Site name:
+SITE_NAME = 'project'
+
+# Add our project to our pythonpath, this way we don't need to type our project
+# name in our dotted import paths:
+path.append(BASE_DIR)
+########## END PATH CONFIGURATION
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-n3vz1d0w&we9t+1t)#l7#pn)xxq0luzx+3!umjcoha)c%*h=y1'
@@ -145,5 +158,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # STATIC_ROOT = '/home/loggik/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'
