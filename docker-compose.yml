@@ -1,22 +1,30 @@
 services:
   backend:
-    # container-name: einkaufsliste-backend
+    container_name: einkaufsliste-backend
     restart: unless-stopped
     build:
       context: ./einkaufsliste
       dockerfile: ../docker/images/backend/Dockerfile
     volumes:
       - ./einkaufsliste:/django
+    networks:
+      - internal
     environment:
-      DEBUG: "true"
+      DEBUG: "false"
   web-static:
-    # container-name: einkaufsliste-web-static
+    container_name: einkaufsliste-web-static
     restart: unless-stopped
     build: ./docker/images/web-static
     volumes:
       - ./einkaufsliste/staticfiles:/usr/share/nginx/html/static
       - ./einkaufsliste/project/media:/usr/share/nginx/html/media
+    networks:
+      - internal
     ports:
       - ${PORT_WEB_STATIC}:80
     depends_on:
       - backend
+networks:
+  internal:
+    driver: bridge
+    name: internal_network
