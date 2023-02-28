@@ -159,6 +159,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+USE_X_FORWARDED_HOST = True
+CSRF_TRUSTED_ORIGINS = ['https://api.einkaufsliste.loggik.de']
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # STATIC_ROOT = '/home/loggik/Einkaufsliste_django/einkaufsliste/einkaufsliste_app/static'
