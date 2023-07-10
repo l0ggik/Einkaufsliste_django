@@ -2,16 +2,23 @@ from rest_framework import serializers
 from einkaufsliste_app.models import (
     CustomList, 
     ListItem, 
-    PurchasingItem, 
+    PurchasingItem,
+    PurchasingItemCategory,
     WasteEvent, 
     WeatherData,
     Recipe,
-    Ingredient
+    Ingredient,
+    BarCode
 )
 
 class PurchasingItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = PurchasingItem
+        fields = '__all__'
+
+class PurchasingItemCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchasingItemCategory
         fields = '__all__'
 
 class CustomListSerializer(serializers.ModelSerializer):
@@ -34,6 +41,10 @@ class WasteEventSerializer(serializers.ModelSerializer):
         model = WasteEvent
         fields = '__all__'
 
+class BarCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarCode
+        fields = '__all__'
 
 class IngredientSerializer(serializers.ModelSerializer):
     name = serializers.StringRelatedField()
