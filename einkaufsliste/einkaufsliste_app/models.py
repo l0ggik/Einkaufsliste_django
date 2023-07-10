@@ -6,6 +6,18 @@ from django.db import models
 class PurchasingItem(models.Model):
     name = models.CharField(max_length=70)
     is_active = models.BooleanField(default=True)
+    date_created = models.DateField(blank=True, null=True, default=None)
+    category = models.ForeignKey('PurchasingItemCategory', default=None, null=True, blank=True, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['category__priority']
+
+class PurchasingItemCategory(models.Model):
+    name = models.CharField(max_length=70)
+    priority = models.PositiveSmallIntegerField(default=1)
+
+    def __str__(self):
+        return self.name
 
 class CustomList(models.Model):
     name = models.CharField(max_length=70)
@@ -32,12 +44,19 @@ class WeatherData(models.Model):
     data_received_date = models.DateTimeField()
     probability_of_rain = models.DecimalField(max_digits=4, decimal_places=2, null=True, default=None, blank=True)
 
+    def __str__(self):
+        return self.description
+
 class WasteEvent(models.Model):
     name = models.CharField(max_length=140)
     event_date = models.DateField()
 
+    def __str__(self):
+        return self.name
     class Meta:
         ordering = ['event_date']
+
+    
     
 class Recipe(models.Model):
     name = models.CharField(max_length=140, default='')
@@ -271,3 +290,10 @@ class IngredientName(models.Model):
 
     def __str__(self):
         return self.name
+
+class BarCode(models.Model):
+    purchasing_item = models.ForeignKey('PurchasingItem', on_delete=models.RESTRICT)
+    code = models.BigIntegerField(unique=True)
+
+    def __str__(self):
+        return str(self.code)
