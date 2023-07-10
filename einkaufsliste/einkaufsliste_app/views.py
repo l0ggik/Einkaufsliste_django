@@ -14,11 +14,13 @@ from einkaufsliste_app.models import (
     CustomList,
     ListItem, 
     PurchasingItem, 
+    PurchasingItemCategory,
     WasteEvent, 
     WeatherData,
     Recipe,
     Ingredient,
-    IngredientName
+    IngredientName,
+    BarCode
 )
 from einkaufsliste_app.serializers import (
     CustomListSerializer, 
@@ -27,7 +29,9 @@ from einkaufsliste_app.serializers import (
     WasteEventSerializer, 
     WeatherDataSerializer,
     RecipeSerializer,
-    IngredientSerializer
+    IngredientSerializer,
+    BarCodeSerializer,
+    PurchasingItemCategorySerializer
 )
 
 class PurchasingItemViewSet(viewsets.ModelViewSet):
@@ -37,7 +41,7 @@ class PurchasingItemViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         item, created = PurchasingItem.objects.update_or_create(
             name=request.data['name'],
-            defaults={'is_active': True}
+            defaults={'is_active': True, 'date_created': timezone.now()}
         )
         serializer = self.get_serializer(item)
         return Response(serializer.data)
@@ -54,6 +58,10 @@ class PurchasingItemViewSet(viewsets.ModelViewSet):
         queryset = PurchasingItem.objects.filter(is_active=True)
         updated_rows = queryset.update(is_active=False)
         return Response(updated_rows)
+
+class PurchasingItemCategoryViewset(viewsets.ModelViewSet):
+    queryset = PurchasingItemCategory.objects.all()
+    serializer_class = PurchasingItemCategorySerializer
 
 class CustomListViewSet(viewsets.ModelViewSet):
     queryset = CustomList.objects.all()
@@ -118,6 +126,38 @@ class WeatherDataViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def wetter_uebermorgen(self, request):
         weather_data = get_weather_forecast_data(2)
         return Response(weather_data)
+
+class BarcodeViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    queryset = BarCode.objects.all()
+    serializer_class = BarCodeSerializer
+
+    def create(self, request, *args, **kwargs):
+        barcode = request.data.get('code', None)
+        if barcode:
+            try:
+                barcode_object = BarCode.objects.get(code=barcode)
+                item, created = PurchasingItem.objects.update_or_create(
+                    name=barcode_object.purchasing_item.name,
+                    defaults={'is_active': True}
+                )
+                serializer = PurchasingItemSerializer(item)
+                return Response(serializer.data)
+            except BarCode.DoesNotExist:
+                return Response({'status': 'failure', 'message': 'unknown code', 'barcode': barcode})
+        else:
+            return Response('parameter "barcode" is required')
+    
+    @action(detail=False, methods=['post'])
+    def add_barcode(self, request, pk=None):
+        barcode = request.data.get('code', None)
+        purchasing_item = request.data.get('purchasing_item', None)
+        if barcode and purchasing_item:
+            purchasing_item_object, created = PurchasingItem.objects.get_or_create(name=purchasing_item)
+            barcode_object = BarCode.objects.create(code=barcode, purchasing_item=purchasing_item_object)
+            serializer = PurchasingItemSerializer(purchasing_item_object)
+            return Response(serializer.data)
+        else:
+            return Response('parameter "barcode" and "purchasing_item" are required')
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
