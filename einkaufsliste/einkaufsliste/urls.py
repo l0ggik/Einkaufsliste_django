@@ -23,10 +23,11 @@ from einkaufsliste_app.views import (
     PurchasingItemViewSet, 
     RecipeViewSet, 
     WeatherDataViewSet,
+    BarcodeViewSet,
     waste_events, 
     einkaufsliste, 
     index, 
-    rezepte   
+    rezepte,  
 )
 
 router = routers.DefaultRouter()
@@ -35,6 +36,7 @@ router.register(r'wetter', WeatherDataViewSet)
 router.register(r'lists', CustomListViewSet)
 router.register(r'list_items', ListItemViewSet)
 router.register(r'recipes', RecipeViewSet)
+router.register(r'barcodes', BarcodeViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
