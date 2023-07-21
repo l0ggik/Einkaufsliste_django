@@ -41,7 +41,7 @@ class PurchasingItemViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         item, created = PurchasingItem.objects.update_or_create(
             name=request.data['name'],
-            defaults={'is_active': True, 'date_created': timezone.now()}
+            defaults={'is_active': True, 'date_created': timezone.now().date()}
         )
         serializer = self.get_serializer(item)
         return Response(serializer.data)
