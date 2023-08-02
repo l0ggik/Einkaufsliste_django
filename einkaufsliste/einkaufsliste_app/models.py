@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class PurchasingItem(models.Model):
-    name = models.CharField(max_length=70)
+    name = models.CharField(max_length=70, unique=True)
     is_active = models.BooleanField(default=True)
     date_created = models.DateField(blank=True, null=True, default=None)
     category = models.ForeignKey('PurchasingItemCategory', default=None, null=True, blank=True, on_delete=models.CASCADE)
@@ -33,6 +33,24 @@ class WeatherData(models.Model):
         (CURRENT_WEATHER, 'current weather'),
         (FORECAST_WEATHER, 'forecast weather')
     ]
+    N = 1
+    NNO = 2
+    O = 3
+    OSO = 4
+    S = 5
+    WSW = 6
+    W = 7
+    WNW = 8
+    WIND_DIRECTION_CHOICES = [
+        (N, 'Nord'),
+        (NNO, 'Nord Nordost'),
+        (O, 'Ost'),
+        (OSO, 'Ost Südost'),
+        (S, 'Süd'),
+        (WSW, 'West Südwest'),
+        (W, 'West'),
+        (WNW, 'West Nordwest')
+    ]
     data_type = models.PositiveSmallIntegerField(choices=DATA_TYPE_CHOICES)
     weather_id = models.PositiveSmallIntegerField()
     description = models.CharField(max_length=140)
@@ -43,6 +61,14 @@ class WeatherData(models.Model):
     weather_date = models.DateTimeField()
     data_received_date = models.DateTimeField()
     probability_of_rain = models.DecimalField(max_digits=4, decimal_places=2, null=True, default=None, blank=True)
+    wind_speed = models.DecimalField(max_digits=5, decimal_places=1, null=True, default=None, blank=True)
+    wind_dir = models.PositiveSmallIntegerField(choices=WIND_DIRECTION_CHOICES, default=None, null=True, blank=True)
+    pressure = models.DecimalField(max_digits=5, decimal_places=1, null=True, default=None, blank=True)
+    precip = models.DecimalField(max_digits=5, decimal_places=1, null=True, default=None, blank=True)
+    humidity = models.PositiveSmallIntegerField(null=True, default=None, blank=True)
+    feelslike = models.DecimalField(max_digits=3, decimal_places=1, null=True, default=None, blank=True)
+    uv = models.DecimalField(max_digits=4, decimal_places=1, null=True, default=None, blank=True)
+    gust = models.DecimalField(max_digits=4, decimal_places=1, null=True, default=None, blank=True)
 
     def __str__(self):
         return self.description
