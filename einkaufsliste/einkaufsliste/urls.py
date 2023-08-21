@@ -24,7 +24,8 @@ from einkaufsliste_app.views import (
     RecipeViewSet, 
     WeatherDataViewSet,
     BarcodeViewSet,
-    waste_events, 
+    waste_events,
+    trigger_waste_check, 
     einkaufsliste, 
     index, 
     rezepte,  
@@ -45,5 +46,6 @@ urlpatterns = [
     path('', index, name='index'),
     path('einkaufsliste/', einkaufsliste, name='einkaufsliste'),
     path('rezepte/', rezepte, name='rezepte'),
-    path('api/muell/', waste_events, name='waste_events')
+    path('api/muell/', waste_events, name='waste_events'),
+    path('ntfy/', trigger_waste_check, name='ntfy')
 ]
