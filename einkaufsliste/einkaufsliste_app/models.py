@@ -8,6 +8,7 @@ class PurchasingItem(models.Model):
     is_active = models.BooleanField(default=True)
     date_created = models.DateField(blank=True, null=True, default=None)
     category = models.ForeignKey('PurchasingItemCategory', default=None, null=True, blank=True, on_delete=models.CASCADE)
+    supplier = models.ForeignKey('Supplier', default=None, null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['category__priority']
@@ -18,6 +19,10 @@ class PurchasingItemCategory(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Supplier(models.Model):
+    name = models.CharField(max_length=70, unique=True)
+
 
 class CustomList(models.Model):
     name = models.CharField(max_length=70)
