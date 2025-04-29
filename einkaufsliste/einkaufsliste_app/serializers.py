@@ -4,6 +4,7 @@ from einkaufsliste_app.models import (
     ListItem, 
     PurchasingItem,
     PurchasingItemCategory,
+    Supplier,
     WasteEvent, 
     WeatherData,
     Recipe,
@@ -19,6 +20,11 @@ class PurchasingItemSerializer(serializers.ModelSerializer):
 class PurchasingItemCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PurchasingItemCategory
+        fields = '__all__'
+
+class SupplierSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Supplier
         fields = '__all__'
 
 class CustomListSerializer(serializers.ModelSerializer):
