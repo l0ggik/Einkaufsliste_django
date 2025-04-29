@@ -3,6 +3,7 @@ from einkaufsliste_app.models import (
     CustomList, 
     ListItem, 
     PurchasingItem, 
+    Supplier,
     WasteEvent, 
     WeatherData, 
     Recipe, 
@@ -16,6 +17,9 @@ from einkaufsliste_app.models import (
 # Register your models here.
 class PurchasingItemAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_active']
+
+class SupplierAdmin(admin.ModelAdmin):
+    list_display = ['name']
 
 class CustomListAdmin(admin.ModelAdmin):
     list_display = ['name']
@@ -50,6 +54,7 @@ class PurchasingItemCategoryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PurchasingItem, PurchasingItemAdmin)
+admin.site.register(Supplier, SupplierAdmin)
 admin.site.register(CustomList, CustomListAdmin)
 admin.site.register(ListItem, ListItemAdmin)
 admin.site.register(WeatherData, WeatherDataAdmin)
