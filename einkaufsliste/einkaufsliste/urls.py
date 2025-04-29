@@ -20,7 +20,8 @@ from rest_framework import routers, serializers, viewsets
 from einkaufsliste_app.views import (
     CustomListViewSet, 
     ListItemViewSet, 
-    PurchasingItemViewSet, 
+    PurchasingItemViewSet,
+    SupplierViewSet, 
     RecipeViewSet, 
     WeatherDataViewSet,
     BarcodeViewSet,
@@ -33,6 +34,7 @@ from einkaufsliste_app.views import (
 
 router = routers.DefaultRouter()
 router.register(r'einkauf', PurchasingItemViewSet)
+router.register(r'supplier', SupplierViewSet)
 router.register(r'wetter', WeatherDataViewSet)
 router.register(r'lists', CustomListViewSet)
 router.register(r'list_items', ListItemViewSet)
