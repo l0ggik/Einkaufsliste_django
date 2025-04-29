@@ -307,10 +307,10 @@ def waste_events(request):
 
 @api_view()
 def trigger_waste_check(request):
-    event = WasteEvent.objects.filter(event_date__gte=timezone.now().date()).first()
-    if event.event_date <= (timezone.now().date() + datetime.timedelta(1)): 
+    events_queryset = WasteEvent.objects.filter(event_date=timezone.now().date() + datetime.timedelta(1))
+    if len(events_queryset) >= 1:
         requests.post("https://ntfy.loggik.de/abfallinfo", 
-        data=f"{event.name} ist dran!".encode(encoding='utf-8'))
+        data=f"{events_queryset.first().name} ist dran!".encode(encoding='utf-8'))
     return Response('Trigger ausgelöst!')
 
 @action(detail=False, methods=['get'])
