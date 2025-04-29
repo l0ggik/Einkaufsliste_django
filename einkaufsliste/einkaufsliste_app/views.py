@@ -15,6 +15,7 @@ from einkaufsliste_app.models import (
     ListItem, 
     PurchasingItem, 
     PurchasingItemCategory,
+    Supplier,
     WasteEvent, 
     WeatherData,
     Recipe,
@@ -25,7 +26,8 @@ from einkaufsliste_app.models import (
 from einkaufsliste_app.serializers import (
     CustomListSerializer, 
     ListItemSerializer, 
-    PurchasingItemSerializer, 
+    PurchasingItemSerializer,
+    SupplierSerializer,
     WasteEventSerializer, 
     WeatherDataSerializer,
     RecipeSerializer,
@@ -38,11 +40,30 @@ class PurchasingItemViewSet(viewsets.ModelViewSet):
     queryset = PurchasingItem.objects.filter(is_active=True)
     serializer_class = PurchasingItemSerializer
 
+    def list(self, request, *args, **kwargs):
+        supplier_name = request.query_params.get('supplier', None)
+        if supplier_name:
+            queryset = PurchasingItem.objects.filter(is_active=True, supplier__name=supplier_name)
+            serializer = PurchasingItemSerializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            return Response('parameter "supplier" is required')
+
+
     def create(self, request, *args, **kwargs):
         name = request.data['name'].strip()
+        supplier_name = request.data['supplier']
+        if supplier_name:
+            supplier = Supplier.objects.get(name=supplier_name)
+        else:
+            supplier = None
         item, created = PurchasingItem.objects.update_or_create(
             name=name,
-            defaults={'is_active': True, 'date_created': timezone.now().date()}
+            defaults={
+                'is_active': True,
+                'date_created': timezone.now().date(),
+                'supplier': supplier
+            }
         )
         serializer = self.get_serializer(item)
         return Response(serializer.data)
@@ -59,6 +80,10 @@ class PurchasingItemViewSet(viewsets.ModelViewSet):
         queryset = PurchasingItem.objects.filter(is_active=True)
         updated_rows = queryset.update(is_active=False)
         return Response(updated_rows)
+
+class SupplierViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Supplier.objects.all()
+    serializer_class = SupplierSerializer
 
 class PurchasingItemCategoryViewset(viewsets.ModelViewSet):
     queryset = PurchasingItemCategory.objects.all()
